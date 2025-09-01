@@ -1,1 +1,54 @@
-<h1>githubpage test</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAWR Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <header class="header">
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Privacidad</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Logo -->
+        <div class="logo">
+            <img src="logo.png" alt="RAWR Logo">
+        </div>
+
+        <!-- Productos -->
+        <section class="products">
+            <div class="product" data-name="Dinotortillas" data-price="5">
+                <img src="dinotortillas.png" alt="Dinotortillas">
+                <p>Dinotortillas</p>
+            </div>
+            <div class="product" data-name="Dinonuggets" data-price="7">
+                <img src="dinonuggets.png" alt="Dinonuggets">
+                <p>Dinonuggets</p>
+            </div>
+            <div class="product" data-name="Bebidas" data-price="2">
+                <img src="bebidas.png" alt="Bebidas">
+                <p>Bebidas</p>
+            </div>
+        </section>
+
+        <!-- Total -->
+        <section class="total">
+            <h2>Total: <span id="total">0</span> PEN</h2>
+            <button id="send-whatsapp">
+                <img src="whatsapp.png" alt="WhatsApp">
+                Chat on WhatsApp
+            </button>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
