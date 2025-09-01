@@ -1,10 +1,534 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAWR Demo</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ROWR - Comida Prehistórica</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(30deg, #705656, #000000 90%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            min-height: 90vh;
+            background: linear-gradient(180deg, #000000, #252525);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .header nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 107, 0, 0.2);
+            border: 2px solid transparent;
+        }
+        
+        .header nav ul li a:hover,
+        .header nav ul li a.active {
+            background-color: #ff6b00;
+            transform: translateY(-3px);
+            border-color: #ffffff;
+        }
+        
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin: 20px 0 40px;
+        }
+        
+        .logo h1 {
+            font-size: 80px;
+            font-weight: 800;
+            color: #ff6b00;
+            text-shadow: 3px 3px 0 #000, 
+                         -1px -1px 0 #000, 
+                         1px -1px 0 #000, 
+                         -1px 1px 0 #000, 
+                         1px 1px 0 #000;
+            letter-spacing: 2px;
+        }
+        
+        /* Productos - RESPONSIVE IMPROVED */
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0 50px;
+        }
+        
+        .product {
+            text-align: center;
+            background: #3d3d3d;
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+            max-width: 100%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            flex: 1 1 300px; /* Permite que se redimensionen */
+        }
+        
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+            border-color: #ff6b00;
+        }
+        
+        .product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 107, 0, 0.1), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #ff9a3d, #ff6b00);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product .price {
+            font-size: 20px;
+            color: #ff6b00;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Botones cantidad */
+        .quantity-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quantity-btn {
+            background: #ff6b00;
+            border: none;
+            color: white;
+            font-size: 20px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #ff8533;
+        }
+
+        .quantity-display {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        /* Total Section */
+        .total-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 107, 0, 0.15);
+            border-radius: 15px;
+            border: 2px solid #ff6b00;
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.2);
+        }
+        
+        .total-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .total-amount {
+            font-size: 42px;
+            color: #ff6b00;
+            font-weight: 800;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(to bottom, #25d366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px 35px;
+            font-size: 22px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .whatsapp-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
+        }
+        
+        .whatsapp-btn:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-btn i {
+            font-size: 28px;
+        }
+        
+        /* Pedido actual */
+        .current-order {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+        }
+        
+        .current-order h3 {
+            margin-bottom: 15px;
+            color: #ff6b00;
+            text-align: center;
+            font-size: 22px;
+        }
+        
+        #order-items {
+            min-height: 50px;
+            text-align: center;
+            padding: 10px;
+            font-style: italic;
+            color: #ccc;
+        }
+        
+        #order-items ul {
+            list-style: none;
+        }
+        
+        #order-items li {
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(255, 107, 0, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+            font-size: 16px;
+            border-top: 1px solid rgba(255, 107, 0, 0.2);
+            width: 100%;
+        }
+        
+        /* Páginas adicionales (Contacto y Privacidad) */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .contact-page, .privacy-page {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contact-page h2, .privacy-page h2 {
+            font-size: 36px;
+            color: #ff6b00;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .contact-info {
+            background: rgba(255, 107, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 107, 0, 0.3);
+        }
+        
+        .contact-info p {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        /* Formulario de reclamos */
+        .complaint-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 107, 0, 0.3);
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ff6b00;
+        }
+        
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #3d3d3d;
+            background: #2d2d2d;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Responsive - MEJORADO */
+        @media (max-width: 1024px) {
+            .product {
+                flex: 1 1 250px; /* Más pequeños en tablets */
+            }
+            
+            .product-image {
+                height: 180px;
+                font-size: 50px;
+            }
+            
+            .product p {
+                font-size: 22px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header nav ul {
+                gap: 15px;
+            }
+            
+            .header nav ul li a {
+                font-size: 18px;
+                padding: 8px 15px;
+            }
+            
+            .logo h1 {
+                font-size: 60px;
+            }
+            
+            .products {
+                gap: 20px;
+            }
+            
+            .product {
+                flex: 1 1 100%; /* Ocupa todo el ancho en móviles */
+                max-width: 100%;
+                padding: 15px;
+            }
+            
+            .product-image {
+                height: 150px;
+                font-size: 45px;
+            }
+            
+            .product p {
+                font-size: 20px;
+            }
+            
+            .product .price {
+                font-size: 18px;
+            }
+            
+            .quantity-btn {
+                font-size: 18px;
+                padding: 6px 12px;
+            }
+            
+            .quantity-display {
+                font-size: 18px;
+            }
+            
+            .total-section h2 {
+                font-size: 28px;
+            }
+            
+            .total-amount {
+                font-size: 36px;
+            }
+            
+            .whatsapp-btn {
+                padding: 15px 25px;
+                font-size: 18px;
+            }
+            
+            .contact-page h2, .privacy-page h2 {
+                font-size: 28px;
+            }
+            
+            .contact-info p {
+                font-size: 18px;
+            }
+            
+            .current-order {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 50px;
+            }
+            
+            .product {
+                padding: 12px;
+            }
+            
+            .product-image {
+                height: 130px;
+                font-size: 40px;
+                margin-bottom: 10px;
+            }
+            
+            .product p {
+                font-size: 18px;
+            }
+            
+            .product .price {
+                font-size: 16px;
+            }
+            
+            .quantity-btn {
+                font-size: 16px;
+                padding: 5px 10px;
+            }
+            
+            .quantity-display {
+                font-size: 16px;
+            }
+            
+            .total-section {
+                padding: 15px;
+            }
+            
+            .total-section h2 {
+                font-size: 24px;
+            }
+            
+            .total-amount {
+                font-size: 32px;
+            }
+            
+            .whatsapp-btn {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+            
+            .current-order {
+                padding: 15px;
+            }
+            
+            .current-order h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,43 +536,267 @@
         <header class="header">
             <nav>
                 <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Contacto</a></li>
-                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#" class="nav-link active" data-page="home">Inicio</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contacto</a></li>
+                    <li><a href="#" class="nav-link" data-page="privacy">Privacidad</a></li>
                 </ul>
             </nav>
         </header>
 
-        <!-- Logo -->
-        <div class="logo">
-            <img src="logo.png" alt="RAWR Logo">
+        <!-- Página de Inicio -->
+        <div id="home-page" class="page active">
+            <!-- Logo -->
+            <div class="logo">
+                <h1>ROWR</h1>
+            </div>
+
+            <!-- Productos -->
+            <section class="products">
+                <div class="product" data-name="Dinotortillas" data-price="5">
+                    <div class="product-image">🌮</div>
+                    <p>Dinotortillas</p>
+                    <div class="price">5 PEN</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn decrease" data-product="Dinotortillas">-</button>
+                        <span id="quantity-Dinotortillas" class="quantity-display">0</span>
+                        <button class="quantity-btn increase" data-product="Dinotortillas">+</button>
+                    </div>
+                </div>
+                <div class="product" data-name="Dinonuggets" data-price="7">
+                    <div class="product-image">🍗</div>
+                    <p>Dinonuggets</p>
+                    <div class="price">7 PEN</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn decrease" data-product="Dinonuggets">-</button>
+                        <span id="quantity-Dinonuggets" class="quantity-display">0</span>
+                        <button class="quantity-btn increase" data-product="Dinonuggets">+</button>
+                    </div>
+                </div>
+                <div class="product" data-name="Bebidas" data-price="2">
+                    <div class="product-image">🥤</div>
+                    <p>Bebidas</p>
+                    <div class="price">2 PEN</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn decrease" data-product="Bebidas">-</button>
+                        <span id="quantity-Bebidas" class="quantity-display">0</span>
+                        <button class="quantity-btn increase" data-product="Bebidas">+</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pedido actual -->
+            <div class="current-order">
+                <h3>Tu pedido:</h3>
+                <div id="order-items">No has seleccionado productos aún</div>
+            </div>
+
+            <!-- Total -->
+            <section class="total-section">
+                <h2>Total: <span id="total" class="total-amount">0</span> PEN</h2>
+                <button id="send-whatsapp" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    Enviar pedido por WhatsApp
+                </button>
+            </section>
         </div>
 
-        <!-- Productos -->
-        <section class="products">
-            <div class="product" data-name="Dinotortillas" data-price="5">
-                <img src="dinotortillas.png" alt="Dinotortillas">
-                <p>Dinotortillas</p>
+        <!-- Página de Contacto -->
+        <div id="contact-page" class="page">
+            <div class="logo">
+                <h1>ROWR</h1>
             </div>
-            <div class="product" data-name="Dinonuggets" data-price="7">
-                <img src="dinonuggets.png" alt="Dinonuggets">
-                <p>Dinonuggets</p>
-            </div>
-            <div class="product" data-name="Bebidas" data-price="2">
-                <img src="bebidas.png" alt="Bebidas">
-                <p>Bebidas</p>
-            </div>
-        </section>
+            
+            <section class="contact-page">
+                <h2>Contacto</h2>
+                
+                <div class="contact-info">
+                    <p>¿Tienes alguna pregunta o comentario? ¡Nos encantaría escucharte!</p>
+                    <p>Puedes contactarnos directamente por WhatsApp haciendo clic en el botón below:</p>
+                    
+                    <button id="contact-whatsapp" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i>
+                        Contactar a ROWR Fast Food
+                    </button>
+                </div>
+            </section>
+        </div>
 
-        <!-- Total -->
-        <section class="total">
-            <h2>Total: <span id="total">0</span> PEN</h2>
-            <button id="send-whatsapp">
-                <img src="whatsapp.png" alt="WhatsApp">
-                Chat on WhatsApp
-            </button>
-        </section>
+        <!-- Página de Privacidad -->
+        <div id="privacy-page" class="page">
+            <div class="logo">
+                <h1>ROWR</h1>
+            </div>
+            
+            <section class="privacy-page">
+                <h2>Política de Privacidad</h2>
+                
+                <div class="contact-info">
+                    <p>En ROWR valoramos tu privacidad y estamos comprometidos a proteger tus datos personales.</p>
+                </div>
+                
+                <h3 style="margin: 30px 0 20px; color: #ff6b00;">Libro de Reclamaciones</h3>
+                
+                <div class="complaint-form">
+                    <form id="complaint-form">
+                        <div class="form-group">
+                            <label for="complaint-date">Fecha de Reclamación:</label>
+                            <input type="date" id="complaint-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="complaint-time">Hora de Reclamación:</label>
+                            <input type="time" id="complaint-time" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="complaint-details">Detalles de tu Reclamación:</label>
+                            <textarea id="complaint-details" placeholder="Describe tu reclamo en detalle..." required></textarea>
+                        </div>
+                        
+                        <button type="button" id="send-complaint" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            Enviar Reclamación por WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>© 2023 ROWR - Comida Prehistórica Deliciosa</p>
+        </footer>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        let total = 0;
+        const selectedProducts = {};
+        const orderItemsElement = document.getElementById('order-items');
+        const whatsappNumber = "+51923966738";
+        
+        // Inicializar productos
+        document.querySelectorAll('.product').forEach(product => {
+            const productName = product.getAttribute('data-name');
+            const productPrice = parseInt(product.getAttribute('data-price'));
+            selectedProducts[productName] = { 
+                price: productPrice, 
+                quantity: 0 
+            };
+        });
+
+        // Botones + y -
+        document.querySelectorAll(".quantity-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                const productName = button.getAttribute('data-product');
+                const isIncrease = button.classList.contains('increase');
+
+                if (isIncrease) {
+                    selectedProducts[productName].quantity += 1;
+                } else if (selectedProducts[productName].quantity > 0) {
+                    selectedProducts[productName].quantity -= 1;
+                }
+
+                document.getElementById(`quantity-${productName}`).textContent =
+                    selectedProducts[productName].quantity;
+
+                updateTotal();
+                updateOrderDisplay();
+            });
+        });
+        
+        // Actualizar el total
+        function updateTotal() {
+            total = 0;
+            for (const [name, data] of Object.entries(selectedProducts)) {
+                total += data.price * data.quantity;
+            }
+            document.getElementById("total").textContent = total;
+        }
+        
+        // Actualizar visualización del pedido
+        function updateOrderDisplay() {
+            const productsWithQuantity = Object.entries(selectedProducts)
+                .filter(([_, data]) => data.quantity > 0);
+            
+            if (productsWithQuantity.length === 0) {
+                orderItemsElement.innerHTML = "No has seleccionado productos aún";
+                return;
+            }
+            
+            let orderHTML = "<ul>";
+            for (const [name, data] of productsWithQuantity) {
+                orderHTML += `<li>${data.quantity} x ${name} - ${data.price * data.quantity} PEN</li>`;
+            }
+            orderHTML += "</ul>";
+            orderItemsElement.innerHTML = orderHTML;
+        }
+        
+        // Enviar pedido por WhatsApp
+        document.getElementById("send-whatsapp").addEventListener("click", () => {
+            const productsWithQuantity = Object.entries(selectedProducts)
+                .filter(([_, data]) => data.quantity > 0);
+                
+            if (productsWithQuantity.length === 0) {
+                alert("Por favor, selecciona al menos un producto antes de enviar el pedido.");
+                return;
+            }
+            
+            let message = "¡Hola! Quiero hacer el siguiente pedido:\n\n";
+            
+            for (const [name, data] of Object.entries(selectedProducts)) {
+                if (data.quantity > 0) {
+                    message += `• ${data.quantity} x ${name} - ${data.price * data.quantity} PEN\n`;
+                }
+            }
+            
+            message += `\nTotal: ${total} PEN`;
+            message += "\n\nGracias!";
+            
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, "_blank");
+        });
+        
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Actualizar clase activa en navegación
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                link.classList.add('active');
+                
+                // Mostrar página correspondiente
+                const pageId = link.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(`${pageId}-page`).classList.add('active');
+            });
+        });
+        
+        // Contactar por WhatsApp
+        document.getElementById('contact-whatsapp').addEventListener('click', () => {
+            const message = "¡Hola! Me gustaría contactarme con ROWR Fast Food para realizar una consulta.";
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, "_blank");
+        });
+        
+        // Enviar reclamo por WhatsApp
+        document.getElementById('send-complaint').addEventListener('click', () => {
+            const date = document.getElementById('complaint-date').value;
+            const time = document.getElementById('complaint-time').value;
+            const details = document.getElementById('complaint-details').value;
+            
+            if (!date || !time || !details) {
+                alert("Por favor, completa todos los campos del formulario de reclamo.");
+                return;
+            }
+            
+            const message = `LIBRO DE RECLAMACIONES - ROWR FAST FOOD\n\nFecha: ${date}\nHora: ${time}\n\nDetalles del reclamo:\n${details}`;
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, "_blank");
+        });
+    </script>
 </body>
 </html>
